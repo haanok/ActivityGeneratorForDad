@@ -30,56 +30,155 @@
 <div id="root"></div>
 
 <script>
-// ── Activity data — dad humor, baby 6–12 months ──────────────────────────────
-window.DAD_ACTIVITIES = {
-  walk: {
-    label: 'Long Walk', emoji: '🚶',
-    activities: [
-      { title: "Nature Scavenger Hunt", description: "Head to the nearest park and hunt for five things: something red, something soft, a bird, a puddle, a stick. Narrate everything aloud — you're the David Attenborough of this pram now.", duration: "45–60 min" },
-      { title: "Neighbourhood Wrong-Turn", description: "Pick a direction you never take. Stop for every dog, digger, or pigeon. No destination. Getting lost is the point.", duration: "30–45 min" },
-      { title: "Bakery Loop", description: "Walk to the nearest bakery. You earn a coffee. Baby gets a pram nap. Everyone wins. The dad-leave classic.", duration: "30–40 min" },
-      { title: "Puddle Patrol", description: "After rain (or after the garden hose), find a route with puddles and crunchy leaves. Let them feel the textures. Wellies non-negotiable.", duration: "20–35 min" },
-      { title: "Forest Bath", description: "Wooded trail, no goal, no Strava. Point at trees, listen for birds. Apparently lowers stress in adults too — for legal reasons that's not a medical claim.", duration: "60–90 min" },
-      { title: "Stroller Espresso Tour", description: "Three cafés, one loop. Rate the flat whites out of ten. Baby is your silent, judgmental sidekick.", duration: "45–75 min" },
-    ],
+// ── Activity data — both languages ────────────────────────────────────────────
+window.ACTIVITIES = {
+  en: {
+    walk: {
+      label: 'Long Walk', emoji: '🚶',
+      activities: [
+        { title: "Nature Scavenger Hunt", description: "Head to the nearest park and hunt for five things: something red, something soft, a bird, a puddle, a stick. Narrate everything aloud — you're the David Attenborough of this pram now.", duration: "45–60 min" },
+        { title: "Neighbourhood Wrong-Turn", description: "Pick a direction you never take. Stop for every dog, digger, or pigeon. No destination. Getting lost is the point.", duration: "30–45 min" },
+        { title: "Bakery Loop", description: "Walk to the nearest bakery. You earn a coffee. Baby gets a pram nap. Everyone wins. The dad-leave classic.", duration: "30–40 min" },
+        { title: "Puddle Patrol", description: "After rain (or after the garden hose), find a route with puddles and crunchy leaves. Let them feel the textures. Wellies non-negotiable.", duration: "20–35 min" },
+        { title: "Forest Bath", description: "Wooded trail, no goal, no Strava. Point at trees, listen for birds. Apparently lowers stress in adults too — for legal reasons that's not a medical claim.", duration: "60–90 min" },
+        { title: "Stroller Espresso Tour", description: "Three cafés, one loop. Rate the flat whites out of ten. Baby is your silent, judgmental sidekick.", duration: "45–75 min" },
+      ],
+    },
+    play: {
+      label: 'Playing', emoji: '🧸',
+      activities: [
+        { title: "Bubble Bonanza", description: "Bubble mix, open window, go. The look on their face is the entire reward. You will inhale at least one bubble — that's normal.", duration: "15–25 min" },
+        { title: "Cushion Mountain", description: "Stack every pillow in the house into a wobbly soft summit. Encourage crawling, tumbling, repeating. Cheap, brilliant, cardio for both of you.", duration: "20–30 min" },
+        { title: "Pot & Spoon Orchestra", description: "Pots, lids, wooden spoons. They bang, you bang, the neighbours regret moving in. This is music education.", duration: "15–20 min" },
+        { title: "Sensory Squish Bag", description: "Zip-lock bag, hair gel, a few small colourful bits. Seal it thoroughly (do not skip this step) and let them poke. Mess-free wizardry.", duration: "10–20 min" },
+        { title: "Dad-Dancing 101", description: "Pick a playlist with no shame. Hold baby, sway, spin slowly, dip dramatically. They cackle, you get steps in.", duration: "20–30 min" },
+        { title: "Peek-a-Boo Marathon", description: "Tea towel, hands, sofa back — any surface is a hiding place. The joke never gets old. Scientifically.", duration: "10–15 min" },
+      ],
+    },
+    puzzle: {
+      label: 'Puzzle', emoji: '🧩',
+      activities: [
+        { title: "Shape Sorter Showdown", description: "Guide chubby hands toward the right hole. Celebrate every success like it's a World Cup goal. Patience is the whole sport.", duration: "15–25 min" },
+        { title: "Stack & Topple", description: "Build a tower of blocks. Baby demolishes it. You rebuild. Repeat until someone is laughing too hard to continue.", duration: "10–20 min" },
+        { title: "Object Permanence Trick", description: "Drop a toy into a cup, tip it back out. Repeat. Watching their brain figure out 'things still exist when hidden' never stops being magic.", duration: "10–15 min" },
+        { title: "Chunky Jigsaw Run", description: "A 2–6 piece chunky puzzle, named out loud as it goes in. \"That's a cow. The cow says moo. We are doing the cow now.\"", duration: "15–20 min" },
+        { title: "Sock Match-Up", description: "Pair up clean socks together. They mostly chew them. You technically did laundry. Multitasking.", duration: "10–15 min" },
+        { title: "Pour Station", description: "Small tub, a few cups, water. They pour, refill, dump. Towel ready. Cause-and-effect plus a wet floor — worth it.", duration: "20–30 min" },
+      ],
+    },
+    read: {
+      label: 'Read', emoji: '📖',
+      activities: [
+        { title: "Lift-the-Flap Theatre", description: "Find any flap book. Do the voices. Commit to the voices. You will see the same flap fifty times today — say hello to it every single time.", duration: "10–20 min" },
+        { title: "Touch-and-Feel Tour", description: "A sensory board book. Guide tiny fingers to the fuzzy bit, the rough bit, the shiny bit. Narrate textures like a wine critic.", duration: "10–15 min" },
+        { title: "Same Book, Again", description: "They will demand the same book. Read it. Read it again. Read it slower. Then faster. Repetition wires their brain — it's a feature.", duration: "15–25 min" },
+        { title: "Reading Fort", description: "Pillows, blanket draped over the sofa, torchlight. A whole new world for ten paperback pages. Snacks optional but recommended.", duration: "20–30 min" },
+        { title: "Rhyme Time", description: "Any nursery rhyme book. Sing more than read. Pat their feet to the beat. They'll be giggling before page three.", duration: "10–15 min" },
+        { title: "Photo Album Story", description: "Open a photo album or phone camera roll. Tell them who's who. \"That's Granny. That's Granny again. That's Granny holding you.\" Bonding fuel.", duration: "15–25 min" },
+      ],
+    },
   },
-  play: {
-    label: 'Playing', emoji: '🧸',
-    activities: [
-      { title: "Bubble Bonanza", description: "Bubble mix, open window, go. The look on their face is the entire reward. You will inhale at least one bubble — that's normal.", duration: "15–25 min" },
-      { title: "Cushion Mountain", description: "Stack every pillow in the house into a wobbly soft summit. Encourage crawling, tumbling, repeating. Cheap, brilliant, cardio for both of you.", duration: "20–30 min" },
-      { title: "Pot & Spoon Orchestra", description: "Pots, lids, wooden spoons. They bang, you bang, the neighbours regret moving in. This is music education.", duration: "15–20 min" },
-      { title: "Sensory Squish Bag", description: "Zip-lock bag, hair gel, a few small colourful bits. Seal it thoroughly (do not skip this step) and let them poke. Mess-free wizardry.", duration: "10–20 min" },
-      { title: "Dad-Dancing 101", description: "Pick a playlist with no shame. Hold baby, sway, spin slowly, dip dramatically. They cackle, you get steps in.", duration: "20–30 min" },
-      { title: "Peek-a-Boo Marathon", description: "Tea towel, hands, sofa back — any surface is a hiding place. The joke never gets old. Scientifically.", duration: "10–15 min" },
-    ],
-  },
-  puzzle: {
-    label: 'Puzzle', emoji: '🧩',
-    activities: [
-      { title: "Shape Sorter Showdown", description: "Guide chubby hands toward the right hole. Celebrate every success like it's a World Cup goal. Patience is the whole sport.", duration: "15–25 min" },
-      { title: "Stack & Topple", description: "Build a tower of blocks. Baby demolishes it. You rebuild. Repeat until someone is laughing too hard to continue.", duration: "10–20 min" },
-      { title: "Object Permanence Trick", description: "Drop a toy into a cup, tip it back out. Repeat. Watching their brain figure out 'things still exist when hidden' never stops being magic.", duration: "10–15 min" },
-      { title: "Chunky Jigsaw Run", description: "A 2–6 piece chunky puzzle, named out loud as it goes in. \"That's a cow. The cow says moo. We are doing the cow now.\"", duration: "15–20 min" },
-      { title: "Sock Match-Up", description: "Pair up clean socks together. They mostly chew them. You technically did laundry. Multitasking.", duration: "10–15 min" },
-      { title: "Pour Station", description: "Small tub, a few cups, water. They pour, refill, dump. Towel ready. Cause-and-effect plus a wet floor — worth it.", duration: "20–30 min" },
-    ],
-  },
-  read: {
-    label: 'Read', emoji: '📖',
-    activities: [
-      { title: "Lift-the-Flap Theatre", description: "Find any flap book. Do the voices. Commit to the voices. You will see the same flap fifty times today — say hello to it every single time.", duration: "10–20 min" },
-      { title: "Touch-and-Feel Tour", description: "A sensory board book. Guide tiny fingers to the fuzzy bit, the rough bit, the shiny bit. Narrate textures like a wine critic.", duration: "10–15 min" },
-      { title: "Same Book, Again", description: "They will demand the same book. Read it. Read it again. Read it slower. Then faster. Repetition wires their brain — it's a feature.", duration: "15–25 min" },
-      { title: "Reading Fort", description: "Pillows, blanket draped over the sofa, torchlight. A whole new world for ten paperback pages. Snacks optional but recommended.", duration: "20–30 min" },
-      { title: "Rhyme Time", description: "Any nursery rhyme book. Sing more than read. Pat their feet to the beat. They'll be giggling before page three.", duration: "10–15 min" },
-      { title: "Photo Album Story", description: "Open a photo album or phone camera roll. Tell them who's who. \"That's Granny. That's Granny again. That's Granny holding you.\" Bonding fuel.", duration: "15–25 min" },
-    ],
+
+  no: {
+    walk: {
+      label: 'Lang tur', emoji: '🚶',
+      activities: [
+        { title: "Naturskattejakt", description: "Dra til nærmeste park og let etter fem ting: noe rødt, noe mykt, en fugl, en sølepytt, en pinne. Kommenter alt høyt — du er nå David Attenborough for denne barnevognen.", duration: "45–60 min" },
+        { title: "Feil vei i nabolaget", description: "Velg en retning du aldri tar. Stopp for hver hund, gravemaskin eller due. Ingen destinasjon. Å gå seg vill er hele poenget.", duration: "30–45 min" },
+        { title: "Bakerirunden", description: "Gå til nærmeste bakeri. Du fortjener en kaffe. Baby får en lur i vognen. Alle vinner. Den klassiske pappaperm-aktiviteten.", duration: "30–40 min" },
+        { title: "Sølepyttpatruljen", description: "Etter regn (eller hageslangen), finn en rute med sølepytter og krispy løv. La dem kjenne på ulike overflater. Gummistøvler er obligatorisk.", duration: "20–35 min" },
+        { title: "Skogsbad", description: "Skogssti, ingen mål, ingen Strava. Pek på trær, lytt etter fugler. Visstnok senker det stress hos voksne også — av juridiske årsaker er ikke dette medisinsk råd.", duration: "60–90 min" },
+        { title: "Espresso-tokt med vognen", description: "Tre kafeer, én runde. Vurder kaffen ut av ti. Baby er din tause, kritiske reisefølge.", duration: "45–75 min" },
+      ],
+    },
+    play: {
+      label: 'Leke', emoji: '🧸',
+      activities: [
+        { title: "Såpeboble-show", description: "Såpeboblemikstur, åpent vindu, i gang. Ansiktsuttrykket er hele belønningen. Du kommer til å svelge minst én boble — det er normalt.", duration: "15–25 min" },
+        { title: "Putefjell", description: "Stable alle puter i huset til et vakkelt, mykt fjell. Oppmuntre til klatring, rulling, gjentakelse. Billig, genialt og kondisjon for begge.", duration: "20–30 min" },
+        { title: "Gryte- og skje-orkester", description: "Gryter, lokk, tresleiver. De banker, du banker, naboene angrer på at de flytta inn. Dette er musikkopplæring.", duration: "15–20 min" },
+        { title: "Sanse-klemmepose", description: "Zip-lock-pose, hårgel, noen fargerike småting. Forsegl grundig (ikke hopp over dette trinnet) og la dem stikke. Rottefri trolldom.", duration: "10–20 min" },
+        { title: "Pappadans 101", description: "Velg en spilleliste uten skam. Hold baby, sving, snurr sakte, legg deg dramatisk bakover. De kacklerer — du får stegene inn.", duration: "20–30 min" },
+        { title: "Titt-tei-maraton", description: "Kjøkkenhåndkle, hender, baksiden av sofaen — alle flater er et gjemmested. Vitsen aldri blir gammel. Vitenskapelig bevist.", duration: "10–15 min" },
+      ],
+    },
+    puzzle: {
+      label: 'Puslespill', emoji: '🧩',
+      activities: [
+        { title: "Formsorteringskamp", description: "Veiled lubne hender mot riktig hull. Feir hver suksess som om det er VM-mål. Tålmodighet er hele idretten.", duration: "15–25 min" },
+        { title: "Bygg og ras", description: "Bygg et tårn av klosser. Baby river det ned. Du bygger det opp igjen. Gjenta til noen ler for hardt til å fortsette.", duration: "10–20 min" },
+        { title: "Objektpermanens-trikset", description: "Slipp et leketøy ned i en kopp, hell det ut igjen. Gjenta. Se hjernen deres forstå at ting eksisterer selv når de er skjult — det stopper aldri å være magisk.", duration: "10–15 min" },
+        { title: "Tjukt puslespill", description: "Et 2–6-bits pappapuslespill, navngitt høyt etter hvert. «Det er en ku. Kua sier mø. Vi gjør kua nå.»", duration: "15–20 min" },
+        { title: "Sokke-match", description: "Par opp rene sokker. De tygger dem mest. Du har teknisk sett gjort vasken. Multitasking på høyt nivå.", duration: "10–15 min" },
+        { title: "Helle-stasjon", description: "Liten balje, noen kopper, vann. De heller, fyller opp, dumper. Håndkle klart. Årsak-og-virkning pluss vått gulv — verdt det.", duration: "20–30 min" },
+      ],
+    },
+    read: {
+      label: 'Les', emoji: '📖',
+      activities: [
+        { title: "Løft-fliken-teater", description: "Finn en klaffe-bok. Gjør stemmene. Kommit til stemmene. Du vil se den samme klaffen femti ganger i dag — si hei til den hver gang.", duration: "10–20 min" },
+        { title: "Ta-og-kjenn-tur", description: "En sensorisk pappbok. Veiled tiny fingre til den lodne biten, den rufsete biten, den blanke biten. Kommenter teksturer som en vinkritiker.", duration: "10–15 min" },
+        { title: "Samme bok, igjen", description: "De vil kreve den samme boken. Les den. Les den igjen. Les den saktere. Så fortere. Gjentakelse kobler opp hjernen — det er en feature.", duration: "15–25 min" },
+        { title: "Lesehule", description: "Puter, teppe drapert over sofaen, lommelykt. En helt ny verden for ti papirboklager. Snacks valgfritt, men anbefalt.", duration: "20–30 min" },
+        { title: "Rimetid", description: "En hvilken som helst barnerimbok. Syng mer enn les. Klapp takten mot føttene deres. De ler før side tre.", duration: "10–15 min" },
+        { title: "Fotoalbum-fortelling", description: "Åpne et fotoalbum eller telefonens kamerarulle. Fortell hvem som er hvem. «Det er Bestemor. Det er Bestemor igjen. Det er Bestemor som holder deg.» Bindingsdrivstoff.", duration: "15–25 min" },
+      ],
+    },
   },
 };
 </script>
 
 <script type="text/babel" data-presets="react">
+
+// ── UI string translations ────────────────────────────────────────────────────
+const STRINGS = {
+  en: {
+    dayLeave:       (n) => `day ${n} · dad-leave`,
+    subtitle:       'today, dad & baby...',
+    headline:       ['What shall', 'we do?'],
+    pickAdventure:  'Pick an Adventure',
+    rollAgain:      'Roll again',
+    thinking:       '...thinking...',
+    emptyLine1:     'pick a sticker above,',
+    emptyLine2:     'then hit the big button',
+    recentlyRolled: 'recently rolled',
+    about:          'about',
+    tweaksTitle:    'Customise',
+    tweakLook:      'Look',
+    tweakFeel:      'Feel',
+    tweakPaperTint: 'Paper tint',
+    tweakTitleFont: 'Title font',
+    tweakDrama:     'Drama',
+    tweakIcons:     'Icons',
+    tints:   [{ value: 'cream', label: 'Cream' }, { value: 'blush', label: 'Blush' }, { value: 'mint', label: 'Mint' }, { value: 'sky', label: 'Sky' }, { value: 'butter', label: 'Butter' }],
+    dramas:  [{ value: 'subtle', label: 'Subtle' }, { value: 'playful', label: 'Playful' }, { value: 'wild', label: 'Wild' }],
+    icons:   [{ value: 'emoji', label: 'Emoji' }, { value: 'letter', label: 'Letter' }, { value: 'shape', label: 'Shape' }],
+    fonts:   [{ value: 'bagel', label: 'Bagel' }, { value: 'lobster', label: 'Lobster' }, { value: 'fredoka', label: 'Fredoka' }],
+  },
+  no: {
+    dayLeave:       (n) => `dag ${n} · pappaperm`,
+    subtitle:       'i dag, pappa & baby...',
+    headline:       ['Hva skal vi', 'gjøre?'],
+    pickAdventure:  'Velg et eventyr',
+    rollAgain:      'Rull igjen',
+    thinking:       '...tenker...',
+    emptyLine1:     'velg et klistremerke,',
+    emptyLine2:     'trykk på den store knappen',
+    recentlyRolled: 'nylig trukket',
+    about:          'ca.',
+    tweaksTitle:    'Tilpass',
+    tweakLook:      'Utseende',
+    tweakFeel:      'Stemning',
+    tweakPaperTint: 'Papirnuanse',
+    tweakTitleFont: 'Tittelskrift',
+    tweakDrama:     'Drama',
+    tweakIcons:     'Ikoner',
+    tints:   [{ value: 'cream', label: 'Krem' }, { value: 'blush', label: 'Rosa' }, { value: 'mint', label: 'Mynte' }, { value: 'sky', label: 'Himmel' }, { value: 'butter', label: 'Smør' }],
+    dramas:  [{ value: 'subtle', label: 'Dempet' }, { value: 'playful', label: 'Lekende' }, { value: 'wild', label: 'Vill' }],
+    icons:   [{ value: 'emoji', label: 'Emoji' }, { value: 'letter', label: 'Bokstav' }, { value: 'shape', label: 'Form' }],
+    fonts:   [{ value: 'bagel', label: 'Bagel' }, { value: 'lobster', label: 'Lobster' }, { value: 'fredoka', label: 'Fredoka' }],
+  },
+};
 
 // ── Tweaks panel ─────────────────────────────────────────────────────────────
 
@@ -101,7 +200,6 @@ const __TWEAKS_STYLE = `
     overflow-y:auto;overflow-x:hidden;min-height:0;
     scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
   .twk-row{display:flex;flex-direction:column;gap:5px}
-  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
   .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
   .twk-lbl>span:first-child{font-weight:500}
   .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
@@ -153,9 +251,7 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     panel.style.bottom = offsetRef.current.y + 'px';
   }, []);
 
-  React.useEffect(() => {
-    if (open) clampToViewport();
-  }, [open, clampToViewport]);
+  React.useEffect(() => { if (open) clampToViewport(); }, [open, clampToViewport]);
 
   React.useEffect(() => {
     const onMsg = (e) => {
@@ -167,26 +263,17 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
-  const dismiss = () => setOpen(false);
-
   const onDragStart = (e) => {
     const panel = dragRef.current;
     if (!panel) return;
     const r = panel.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const startRight = window.innerWidth - r.right;
-    const startBottom = window.innerHeight - r.bottom;
+    const sx = e.clientX, startRight = window.innerWidth - r.right;
+    const sy = e.clientY, startBottom = window.innerHeight - r.bottom;
     const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startBottom - (ev.clientY - sy),
-      };
+      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
       clampToViewport();
     };
-    const up = () => {
-      window.removeEventListener('mousemove', move);
-      window.removeEventListener('mouseup', up);
-    };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
   };
@@ -195,11 +282,10 @@ function TweaksPanel({ title = 'Tweaks', children }) {
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel"
-           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>
-          <button className="twk-x" aria-label="Close" onClick={dismiss}>✕</button>
+          <button className="twk-x" onClick={() => setOpen(false)}>✕</button>
         </div>
         <div className="twk-body">{children}</div>
       </div>
@@ -212,18 +298,12 @@ function TweakSection({ label, children }) {
 }
 
 function TweakRow({ label, children }) {
-  return (
-    <div className="twk-row">
-      <div className="twk-lbl"><span>{label}</span></div>
-      {children}
-    </div>
-  );
+  return <div className="twk-row"><div className="twk-lbl"><span>{label}</span></div>{children}</div>;
 }
 
 function TweakRadio({ label, value, options, onChange }) {
   const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
-  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
-  const maxLen = opts.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const maxLen = opts.reduce((m, o) => Math.max(m, String(o.label).length), 0);
   const n = opts.length;
   const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[n] ?? 0);
 
@@ -248,8 +328,7 @@ function TweakRadio({ label, value, options, onChange }) {
 
   const segAt = (clientX) => {
     const r = trackRef.current.getBoundingClientRect();
-    const inner = r.width - 4;
-    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
     return opts[Math.max(0, Math.min(n - 1, i))].value;
   };
 
@@ -257,16 +336,8 @@ function TweakRadio({ label, value, options, onChange }) {
     setDragging(true);
     const v0 = segAt(e.clientX);
     if (v0 !== valueRef.current) onChange(v0);
-    const move = (ev) => {
-      if (!trackRef.current) return;
-      const v = segAt(ev.clientX);
-      if (v !== valueRef.current) onChange(v);
-    };
-    const up = () => {
-      setDragging(false);
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
+    const move = (ev) => { if (trackRef.current) { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); } };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
   };
@@ -277,12 +348,9 @@ function TweakRadio({ label, value, options, onChange }) {
       <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
            className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
         <div className="twk-seg-thumb"
-             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
-                      width: `calc((100% - 4px) / ${n})` }} />
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
         {opts.map((o) => (
-          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
-            {o.label}
-          </button>
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>
         ))}
       </div>
     </TweakRow>
@@ -290,7 +358,7 @@ function TweakRadio({ label, value, options, onChange }) {
 }
 
 
-// ── Storybook Crayon — Direction A ───────────────────────────────────────────
+// ── Design constants ──────────────────────────────────────────────────────────
 
 const PALETTES = {
   cream:  { paper: '#FAF3E0', ink: '#3A2F23', muted: '#8A7256', accent: '#C9A86B' },
@@ -314,9 +382,9 @@ const DRAMA = {
 };
 
 const TITLE_FONTS = {
-  bagel:   { family: '"Bagel Fat One", serif',   weight: 400, sizeHero: 46, sizeCard: 26 },
-  lobster: { family: '"Lobster", cursive',        weight: 400, sizeHero: 50, sizeCard: 28 },
-  fredoka: { family: '"Fredoka", system-ui',      weight: 700, sizeHero: 48, sizeCard: 27 },
+  bagel:   { family: '"Bagel Fat One", serif',  weight: 400, sizeHero: 46, sizeCard: 26 },
+  lobster: { family: '"Lobster", cursive',       weight: 400, sizeHero: 50, sizeCard: 28 },
+  fredoka: { family: '"Fredoka", system-ui',     weight: 700, sizeHero: 48, sizeCard: 27 },
 };
 
 function getDayOnLeave() {
@@ -328,16 +396,18 @@ function getDayOnLeave() {
     try { localStorage.setItem(KEY, today); } catch {}
     return 1;
   }
-  const start = new Date(stored);
-  const now = new Date();
-  start.setHours(0, 0, 0, 0);
-  now.setHours(0, 0, 0, 0);
+  const start = new Date(stored), now = new Date();
+  start.setHours(0, 0, 0, 0); now.setHours(0, 0, 0, 0);
   return Math.max(1, Math.floor((now - start) / 86400000) + 1);
 }
 
-function Icon({ cat, style, size = 32 }) {
+
+// ── Shared sub-components ─────────────────────────────────────────────────────
+
+function Icon({ cat, style, size = 32, lang }) {
+  const data = ACTIVITIES[lang][cat];
   if (style === 'emoji') {
-    return <span style={{ fontSize: size, lineHeight: 1, display: 'inline-flex' }}>{DAD_ACTIVITIES[cat].emoji}</span>;
+    return <span style={{ fontSize: size, lineHeight: 1, display: 'inline-flex' }}>{data.emoji}</span>;
   }
   const letter = { walk: 'W', play: 'P', puzzle: 'Z', read: 'R' }[cat];
   const color = { walk: '#A8C49A', play: '#F4B5A8', puzzle: '#E8C36A', read: '#A8C3D8' }[cat];
@@ -346,8 +416,7 @@ function Icon({ cat, style, size = 32 }) {
       <div style={{
         width: size, height: size, borderRadius: '50%', background: color,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: '"Bagel Fat One", serif',
-        fontSize: size * 0.55, color: '#fff',
+        fontFamily: '"Bagel Fat One", serif', fontSize: size * 0.55, color: '#fff',
         boxShadow: '0 2px 0 rgba(0,0,0,0.12)',
       }}>{letter}</div>
     );
@@ -374,7 +443,40 @@ function Squiggle({ color = '#C9A86B', style = {} }) {
   );
 }
 
-function ActivityCard({ cat, item, palette, C, rotation, drama, titleFont, iconStyle, seedKey }) {
+function LangSwitcher({ lang, palette, onChange }) {
+  const opts = [
+    { code: 'no', flag: '🇳🇴', label: 'NO' },
+    { code: 'en', flag: '🇬🇧', label: 'EN' },
+  ];
+  return (
+    <div style={{ display: 'flex', gap: 4 }}>
+      {opts.map(({ code, flag, label }) => {
+        const active = lang === code;
+        return (
+          <button key={code} onClick={() => onChange(code)}
+            title={code === 'no' ? 'Norsk' : 'English'}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 4,
+              padding: '2px 8px',
+              background: active ? palette.ink : 'transparent',
+              color: active ? palette.paper : palette.muted,
+              border: `1.5px solid ${active ? palette.ink : palette.ink + '44'}`,
+              borderRadius: 999,
+              fontFamily: '"Nunito"', fontWeight: 800, fontSize: 11,
+              transition: 'all .15s',
+              lineHeight: 1.6,
+            }}>
+            <span style={{ fontSize: 13 }}>{flag}</span>
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActivityCard({ cat, item, palette, C, rotation, drama, titleFont, iconStyle, lang, seedKey }) {
+  const s = STRINGS[lang];
   return (
     <div key={seedKey} style={{
       position: 'relative',
@@ -392,27 +494,22 @@ function ActivityCard({ cat, item, palette, C, rotation, drama, titleFont, iconS
         transform: 'translateX(-50%) rotate(-4deg)',
         width: 90, height: 26, background: C.tape, opacity: 0.88,
         backgroundImage: 'repeating-linear-gradient(45deg, transparent 0 4px, rgba(255,255,255,0.28) 4px 8px)',
-        borderRadius: 2,
-        boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+        borderRadius: 2, boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
       }}/>
       {/* corner doodle */}
-      <svg width="28" height="28" viewBox="0 0 28 28" style={{
-        position: 'absolute', top: 10, right: 10, opacity: 0.55,
-      }}>
+      <svg width="28" height="28" viewBox="0 0 28 28" style={{ position: 'absolute', top: 10, right: 10, opacity: 0.55 }}>
         <path d="M4 14 Q 4 4, 14 4 T 24 14" stroke={C.ink} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
         <circle cx="14" cy="14" r="2.5" fill={C.ink}/>
       </svg>
 
       <div style={{
         display: 'inline-flex', alignItems: 'center', gap: 6,
-        padding: '4px 10px', background: C.bg,
-        borderRadius: 999, marginBottom: 14,
+        padding: '4px 10px', background: C.bg, borderRadius: 999, marginBottom: 14,
         fontFamily: '"Nunito"', fontWeight: 800, fontSize: 11,
-        textTransform: 'uppercase', letterSpacing: 0.8,
-        color: C.ink,
+        textTransform: 'uppercase', letterSpacing: 0.8, color: C.ink,
       }}>
-        <Icon cat={cat} style={iconStyle} size={14}/>
-        {DAD_ACTIVITIES[cat].label}
+        <Icon cat={cat} style={iconStyle} size={14} lang={lang}/>
+        {ACTIVITIES[lang][cat].label}
       </div>
 
       <div style={{
@@ -435,38 +532,34 @@ function ActivityCard({ cat, item, palette, C, rotation, drama, titleFont, iconS
           <circle cx="12" cy="12" r="9" stroke={C.ink} strokeWidth="2"/>
           <path d="M12 7v5l3 2" stroke={C.ink} strokeWidth="2" strokeLinecap="round"/>
         </svg>
-        about {item.duration}
+        {s.about} {item.duration}
       </div>
     </div>
   );
 }
 
-function EmptyState({ palette, C, cat, iconStyle }) {
+function EmptyState({ palette, C, cat, iconStyle, lang }) {
+  const s = STRINGS[lang];
   return (
     <div style={{
       position: 'relative',
       background: 'rgba(255,252,244,0.55)',
       border: `2px dashed ${palette.ink}55`,
-      borderRadius: 14,
-      padding: '28px 22px 26px',
-      textAlign: 'center',
+      borderRadius: 14, padding: '28px 22px 26px', textAlign: 'center',
     }}>
       <div style={{
         fontSize: 42, lineHeight: 1, marginBottom: 12,
         transform: 'rotate(-4deg)', display: 'inline-block',
         filter: 'drop-shadow(0 3px 0 rgba(58,47,35,0.08))',
       }}>
-        <Icon cat={cat} style={iconStyle} size={48}/>
+        <Icon cat={cat} style={iconStyle} size={48} lang={lang}/>
       </div>
       <div style={{
         fontFamily: '"Caveat", cursive', fontSize: 22,
-        color: palette.muted, lineHeight: 1.2,
-        transform: 'rotate(-1deg)',
-      }}>pick a sticker above,<br/>then hit the big button</div>
-      {/* arrow pointing up */}
+        color: palette.muted, lineHeight: 1.2, transform: 'rotate(-1deg)',
+      }}>{s.emptyLine1}<br/>{s.emptyLine2}</div>
       <svg width="36" height="46" viewBox="0 0 36 46" style={{
-        position: 'absolute', top: -34, right: 30, opacity: 0.7,
-        transform: 'rotate(8deg)',
+        position: 'absolute', top: -34, right: 30, opacity: 0.7, transform: 'rotate(8deg)',
       }}>
         <path d="M18 44 C 18 30, 6 22, 6 8" stroke={palette.muted} strokeWidth="2" fill="none" strokeLinecap="round" strokeDasharray="3 4"/>
         <path d="M2 12 L 6 4 L 12 10" stroke={palette.muted} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
@@ -475,11 +568,15 @@ function EmptyState({ palette, C, cat, iconStyle }) {
   );
 }
 
-function Storybook({ tweaks }) {
+
+// ── Main app view ─────────────────────────────────────────────────────────────
+
+function Storybook({ tweaks, lang, onLangChange }) {
   const palette = PALETTES[tweaks.tint] || PALETTES.cream;
-  const drama = DRAMA[tweaks.drama] || DRAMA.playful;
+  const drama   = DRAMA[tweaks.drama]   || DRAMA.playful;
   const titleFont = TITLE_FONTS[tweaks.titleFont] || TITLE_FONTS.bagel;
   const iconStyle = tweaks.iconStyle;
+  const s = STRINGS[lang];
 
   const [cat, setCat] = React.useState('walk');
   const [activity, setActivity] = React.useState(null);
@@ -496,10 +593,16 @@ function Storybook({ tweaks }) {
   const C = CAT_COLORS[cat];
   const cardRotation = drama.card;
 
+  const switchLang = (newLang) => {
+    onLangChange(newLang);
+    setActivity(null);
+    setHistory([]);
+  };
+
   const pick = () => {
     setSpinning(true);
     setTimeout(() => {
-      const pool = DAD_ACTIVITIES[cat].activities;
+      const pool = ACTIVITIES[lang][cat].activities;
       let next, attempts = 0;
       do {
         next = pool[Math.floor(Math.random() * pool.length)];
@@ -545,16 +648,16 @@ function Storybook({ tweaks }) {
         backgroundSize: '4px 4px',
       }}/>
 
-      {/* top row: day counter + live badge + settings */}
+      {/* top row */}
       <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        display: 'flex', alignItems: 'center',
         marginBottom: 14, position: 'relative', zIndex: 1, gap: 8,
       }}>
         <span style={{
           fontFamily: '"Caveat", cursive', fontSize: 19, color: palette.muted,
           transform: 'rotate(-1deg)', transformOrigin: 'left',
           whiteSpace: 'nowrap', flex: 1,
-        }}>day {dayNum} · dad-leave</span>
+        }}>{s.dayLeave(dayNum)}</span>
 
         <span style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -564,38 +667,36 @@ function Storybook({ tweaks }) {
           fontFamily: '"Nunito"', fontWeight: 800,
           color: palette.ink, transform: 'rotate(2deg)',
           boxShadow: `1.5px 1.5px 0 ${palette.ink}`,
-          whiteSpace: 'nowrap',
+          whiteSpace: 'nowrap', flexShrink: 0,
         }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#D94B3C', flexShrink: 0 }}/>
           live
         </span>
 
-        <button onClick={openTweaks} title="Customise" style={{
+        <LangSwitcher lang={lang} palette={palette} onChange={switchLang}/>
+
+        <button onClick={openTweaks} title={s.tweaksTitle} style={{
           background: 'none', border: 'none', padding: 4,
           opacity: 0.45, fontSize: 18, lineHeight: 1,
-          transform: 'rotate(2deg)',
-          transition: 'opacity .15s',
+          transform: 'rotate(2deg)', transition: 'opacity .15s', flexShrink: 0,
         }} onMouseEnter={(e) => e.currentTarget.style.opacity = 0.8}
-           onMouseLeave={(e) => e.currentTarget.style.opacity = 0.45}>
-          ⚙
-        </button>
+           onMouseLeave={(e) => e.currentTarget.style.opacity = 0.45}>⚙</button>
       </div>
 
       {/* headline */}
       <div style={{ position: 'relative', marginBottom: 6 }}>
         <div style={{
           fontFamily: '"Caveat", cursive',
-          fontSize: 22, color: palette.muted, lineHeight: 1.1,
-          marginBottom: 6,
+          fontSize: 22, color: palette.muted, lineHeight: 1.1, marginBottom: 6,
           transform: 'rotate(-1.5deg)', transformOrigin: 'left',
           display: 'inline-block', whiteSpace: 'nowrap',
-        }}>today, dad &amp; baby...</div>
+        }}>{s.subtitle}</div>
         <h1 style={{
           fontFamily: titleFont.family, fontWeight: titleFont.weight,
           fontSize: titleFont.sizeHero, lineHeight: 0.95,
           color: palette.ink, letterSpacing: -0.5,
           margin: 0, marginBottom: 6,
-        }}>What shall<br/>we do?</h1>
+        }}>{s.headline[0]}<br/>{s.headline[1]}</h1>
         <div style={{ position: 'absolute', top: 16, right: -4 }}>
           <Squiggle color={palette.accent}/>
         </div>
@@ -610,8 +711,7 @@ function Storybook({ tweaks }) {
           const active = c === cat;
           const cc = CAT_COLORS[c];
           return (
-            <button key={c}
-              onClick={() => { setCat(c); setActivity(null); }}
+            <button key={c} onClick={() => { setCat(c); setActivity(null); }}
               style={{
                 display: 'flex', alignItems: 'center', gap: 8,
                 padding: '9px 14px 9px 11px',
@@ -626,8 +726,8 @@ function Storybook({ tweaks }) {
                   : `2px 2px 0 ${palette.ink}`,
                 transition: 'transform .18s, box-shadow .18s, background .18s, border-color .18s',
               }}>
-              <Icon cat={c} style={iconStyle} size={22}/>
-              {DAD_ACTIVITIES[c].label}
+              <Icon cat={c} style={iconStyle} size={22} lang={lang}/>
+              {ACTIVITIES[lang][c].label}
             </button>
           );
         })}
@@ -648,7 +748,7 @@ function Storybook({ tweaks }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         position: 'relative', zIndex: 1,
       }}>
-        <span>{spinning ? '...thinking...' : (activity ? 'Roll again' : 'Pick an Adventure')}</span>
+        <span>{spinning ? s.thinking : (activity ? s.rollAgain : s.pickAdventure)}</span>
         <span style={{
           display: 'inline-block',
           transition: 'transform .35s',
@@ -665,9 +765,10 @@ function Storybook({ tweaks }) {
             palette={palette} C={C}
             rotation={cardRotation} drama={drama}
             titleFont={titleFont} iconStyle={iconStyle}
+            lang={lang}
           />
         ) : (
-          <EmptyState palette={palette} C={C} cat={cat} iconStyle={iconStyle}/>
+          <EmptyState palette={palette} C={C} cat={cat} iconStyle={iconStyle} lang={lang}/>
         )}
       </div>
 
@@ -678,7 +779,7 @@ function Storybook({ tweaks }) {
             fontFamily: '"Caveat", cursive', fontSize: 18,
             color: palette.muted, marginBottom: 8,
             transform: 'rotate(-1deg)', transformOrigin: 'left', display: 'inline-block',
-          }}>recently rolled</div>
+          }}>{s.recentlyRolled}</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {history.map((h, i) => {
               const hc = CAT_COLORS[h.cat];
@@ -687,8 +788,7 @@ function Storybook({ tweaks }) {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
                     padding: '5px 10px 5px 8px',
-                    background: '#FFFCF4',
-                    border: `1.5px solid ${palette.ink}`,
+                    background: '#FFFCF4', border: `1.5px solid ${palette.ink}`,
                     borderRadius: 999,
                     fontFamily: '"Nunito"', fontWeight: 700, fontSize: 12,
                     color: palette.ink,
@@ -696,7 +796,7 @@ function Storybook({ tweaks }) {
                     maxWidth: 200, overflow: 'hidden',
                     whiteSpace: 'nowrap', textOverflow: 'ellipsis',
                   }}>
-                  <Icon cat={h.cat} style={iconStyle} size={14}/>
+                  <Icon cat={h.cat} style={iconStyle} size={14} lang={lang}/>
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.title}</span>
                 </button>
               );
@@ -719,56 +819,37 @@ function Storybook({ tweaks }) {
 
 // ── App ───────────────────────────────────────────────────────────────────────
 
-const TWEAK_DEFAULTS = {
-  iconStyle: 'emoji',
-  tint: 'cream',
-  drama: 'playful',
-  titleFont: 'bagel',
-};
+const TWEAK_DEFAULTS = { iconStyle: 'emoji', tint: 'cream', drama: 'playful', titleFont: 'bagel' };
+
+function getLang() {
+  try { return localStorage.getItem('dad-app-lang') || 'no'; } catch { return 'no'; }
+}
+function saveLang(l) {
+  try { localStorage.setItem('dad-app-lang', l); } catch {}
+}
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLangState] = React.useState(getLang);
+  const s = STRINGS[lang];
+
+  const setLang = (l) => { setLangState(l); saveLang(l); };
+
   return (
     <React.Fragment>
-      <Storybook tweaks={t}/>
-      <TweaksPanel title="Customise">
-        <TweakSection label="Look">
-          <TweakRadio label="Paper tint" value={t.tint}
-            options={[
-              { value: 'cream',  label: 'Cream'  },
-              { value: 'blush',  label: 'Blush'  },
-              { value: 'mint',   label: 'Mint'   },
-              { value: 'sky',    label: 'Sky'    },
-              { value: 'butter', label: 'Butter' },
-            ]}
-            onChange={(v) => setTweak('tint', v)}
-          />
-          <TweakRadio label="Title font" value={t.titleFont}
-            options={[
-              { value: 'bagel',   label: 'Bagel'   },
-              { value: 'lobster', label: 'Lobster' },
-              { value: 'fredoka', label: 'Fredoka' },
-            ]}
-            onChange={(v) => setTweak('titleFont', v)}
-          />
+      <Storybook tweaks={t} lang={lang} onLangChange={setLang}/>
+      <TweaksPanel title={s.tweaksTitle}>
+        <TweakSection label={s.tweakLook}>
+          <TweakRadio label={s.tweakPaperTint} value={t.tint} options={s.tints}
+            onChange={(v) => setTweak('tint', v)}/>
+          <TweakRadio label={s.tweakTitleFont} value={t.titleFont} options={s.fonts}
+            onChange={(v) => setTweak('titleFont', v)}/>
         </TweakSection>
-        <TweakSection label="Feel">
-          <TweakRadio label="Drama" value={t.drama}
-            options={[
-              { value: 'subtle',  label: 'Subtle'  },
-              { value: 'playful', label: 'Playful' },
-              { value: 'wild',    label: 'Wild'    },
-            ]}
-            onChange={(v) => setTweak('drama', v)}
-          />
-          <TweakRadio label="Icons" value={t.iconStyle}
-            options={[
-              { value: 'emoji',  label: 'Emoji'  },
-              { value: 'letter', label: 'Letter' },
-              { value: 'shape',  label: 'Shape'  },
-            ]}
-            onChange={(v) => setTweak('iconStyle', v)}
-          />
+        <TweakSection label={s.tweakFeel}>
+          <TweakRadio label={s.tweakDrama} value={t.drama} options={s.dramas}
+            onChange={(v) => setTweak('drama', v)}/>
+          <TweakRadio label={s.tweakIcons} value={t.iconStyle} options={s.icons}
+            onChange={(v) => setTweak('iconStyle', v)}/>
         </TweakSection>
       </TweaksPanel>
     </React.Fragment>
