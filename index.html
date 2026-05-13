@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dad Activity Generator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2.5rem 2rem;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+
+    .hero-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #2d2d2d;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Intensity selector */
+    .intensity-label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .intensity-buttons {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .intensity-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.75rem 0.5rem;
+      border: 2.5px solid #e0e0e0;
+      border-radius: 1rem;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #555;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .intensity-btn .icon { font-size: 1.6rem; }
+
+    .intensity-btn:hover {
+      border-color: #fcb69f;
+      background: #fff8f5;
+      transform: translateY(-2px);
+    }
+
+    .intensity-btn.active {
+      border-color: #ff7043;
+      background: #fff3ee;
+      color: #ff7043;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 112, 67, 0.2);
+    }
+
+    /* Generate button */
+    .generate-btn {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 1.2rem;
+      background: linear-gradient(135deg, #ff7043, #fcb69f);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(255, 112, 67, 0.35);
+      margin-bottom: 2rem;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(255, 112, 67, 0.45);
+    }
+
+    .generate-btn:active { transform: translateY(0); }
+
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Activity result */
+    .activity-box {
+      background: #fafafa;
+      border-radius: 1.2rem;
+      padding: 1.5rem;
+      text-align: left;
+      border: 1.5px solid #f0f0f0;
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .activity-box.visible { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .activity-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .tag-walk   { background: #e8f5e9; color: #388e3c; }
+    .tag-play   { background: #e3f2fd; color: #1976d2; }
+    .tag-puzzle { background: #f3e5f5; color: #7b1fa2; }
+
+    .activity-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-description {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .activity-duration {
+      font-size: 0.85rem;
+      color: #999;
+      font-weight: 600;
+    }
+
+    .activity-duration span { color: #ff7043; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="hero-icon">👶</div>
+  <h1>Dad Activity Generator</h1>
+  <p class="subtitle">Congratulations on your paternal leave! What shall we do today?</p>
+
+  <p class="intensity-label">Choose intensity</p>
+  <div class="intensity-buttons">
+    <button class="intensity-btn active" data-type="walk" onclick="selectType(this)">
+      <span class="icon">🚶</span>Long Walk
+    </button>
+    <button class="intensity-btn" data-type="play" onclick="selectType(this)">
+      <span class="icon">🧸</span>Playing
+    </button>
+    <button class="intensity-btn" data-type="puzzle" onclick="selectType(this)">
+      <span class="icon">🧩</span>Puzzle
+    </button>
+  </div>
+
+  <button class="generate-btn" onclick="generateActivity()">
+    Generate Activity ✨
+  </button>
+
+  <div class="activity-box" id="activityBox">
+    <div class="activity-type" id="activityTag"></div>
+    <div class="activity-title" id="activityTitle"></div>
+    <div class="activity-description" id="activityDesc"></div>
+    <div class="activity-duration">Duration: <span id="activityDuration"></span></div>
+  </div>
+</div>
+
+<script>
+  const activities = {
+    walk: [
+      {
+        title: "Nature Scavenger Hunt Walk",
+        description: "Head to the nearest park and look for 5 things: something red, something soft, a bird, a puddle, and a stick. Point everything out to the little one and narrate what you see — babies love the sound of your voice.",
+        duration: "45–60 min"
+      },
+      {
+        title: "Neighbourhood Discovery Stroll",
+        description: "Pick a direction you don't usually go and just walk. Stop whenever something catches attention — a dog behind a fence, a digger on a construction site, or pigeons on a roof. No destination needed.",
+        duration: "30–45 min"
+      },
+      {
+        title: "Morning Bakery Loop",
+        description: "Walk to the nearest bakery, grab yourself a coffee and a treat, and stroll back. Fresh air, a reward, and a happy baby in the pram — a dad-leave classic.",
+        duration: "30–40 min"
+      },
+      {
+        title: "Puddle Patrol",
+        description: "After rain (or just for fun), find a route with puddles, crunchy leaves, or interesting textures underfoot. Let the little one feel the different surfaces. Wellies optional but recommended.",
+        duration: "20–35 min"
+      },
+      {
+        title: "Forest Bathing Wander",
+        description: "Find a wooded trail and walk slowly — no goal, no pace target. Point out trees, listen for birds, breathe the air. Studies show it lowers stress for parent and child alike.",
+        duration: "60–90 min"
+      }
+    ],
+    play: [
+      {
+        title: "Bubble Bonanza",
+        description: "Grab a bottle of bubble mix and go outside (or open a window). Blow bubbles and let the little one try to catch or pop them. The look of wonder on their face never gets old.",
+        duration: "15–25 min"
+      },
+      {
+        title: "Cushion Mountain",
+        description: "Stack every cushion and pillow in the living room into a soft climbing mountain. Encourage crawling up and tumbling down. Great for motor development and guarantees big laughs.",
+        duration: "20–30 min"
+      },
+      {
+        title: "Pot and Spoon Orchestra",
+        description: "Pull out a few pots, lids, and wooden spoons. Let the baby bang away — it's an early music lesson. Join in on your own 'instrument' and make it a duet.",
+        duration: "15–20 min"
+      },
+      {
+        title: "Sensory Bag Play",
+        description: "Fill a zip-lock bag with hair gel and a few small colourful objects, seal it well. Let the little one squish and poke — all the sensory fun with zero mess.",
+        duration: "10–20 min"
+      },
+      {
+        title: "Dance Party",
+        description: "Put on your favourite playlist — upbeat, slow, anything goes — and dance with the baby in your arms. Spin, bounce, sway. They'll love the movement and you'll feel great.",
+        duration: "20–30 min"
+      },
+      {
+        title: "Peek-a-Boo Marathon",
+        description: "Classic for a reason. Use your hands, a tea towel, a pillow, the sofa — anywhere can be a hiding spot. Mix it up and watch the giggles roll in.",
+        duration: "10–15 min"
+      }
+    ],
+    puzzle: [
+      {
+        title: "Shape Sorter Challenge",
+        description: "Sit together with a shape sorter or any simple sorting toy. Guide little hands to find the matching hole. Patience is the game — celebrate every success loudly.",
+        duration: "15–25 min"
+      },
+      {
+        title: "Stacking Tower Race",
+        description: "Build a tower of blocks together, then knock it down — pure joy. Gradually make it taller each round. See who laughs more when it topples.",
+        duration: "10–20 min"
+      },
+      {
+        title: "Object Permanence Box",
+        description: "Drop a small toy into a cup or box so it disappears, then tip it out. Repeat slowly. This simple trick teaches the brain that things exist even when hidden — a genuine developmental milestone.",
+        duration: "10–15 min"
+      },
+      {
+        title: "Simple Jigsaw Expedition",
+        description: "Pick a 2–6 piece chunky jigsaw and work through it together, naming each picture as pieces go in. Repetition is the point — toddler brains love doing it again and again.",
+        duration: "15–20 min"
+      },
+      {
+        title: "Matching Pairs Memory Game",
+        description: "Lay out pairs of matching objects (socks, blocks of the same colour, cups) face down and take turns flipping. Even if they can't follow the rules yet, the colour matching and tactile exploration are great.",
+        duration: "15–25 min"
+      },
+      {
+        title: "Water Pouring Station",
+        description: "Set up a small tub with cups and containers of different sizes. Let them pour, fill, and empty to their heart's content. Towel nearby recommended. Focus, concentration, and cause-and-effect all in one.",
+        duration: "20–30 min"
+      }
+    ]
+  };
+
+  let selectedType = 'walk';
+
+  function selectType(btn) {
+    document.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedType = btn.dataset.type;
+    document.getElementById('activityBox').classList.remove('visible');
+  }
+
+  function generateActivity() {
+    const pool = activities[selectedType];
+    const item = pool[Math.floor(Math.random() * pool.length)];
+
+    const tagEl = document.getElementById('activityTag');
+    tagEl.textContent = selectedType === 'walk' ? '🚶 Long Walk'
+                      : selectedType === 'play' ? '🧸 Playing'
+                      : '🧩 Puzzle';
+    tagEl.className = 'activity-type ' + (
+      selectedType === 'walk' ? 'tag-walk'
+    : selectedType === 'play' ? 'tag-play'
+    : 'tag-puzzle'
+    );
+
+    document.getElementById('activityTitle').textContent = item.title;
+    document.getElementById('activityDesc').textContent = item.description;
+    document.getElementById('activityDuration').textContent = item.duration;
+
+    const box = document.getElementById('activityBox');
+    box.classList.remove('visible');
+    void box.offsetWidth; // reflow to restart animation
+    box.classList.add('visible');
+  }
+</script>
+
+</body>
+</html>
