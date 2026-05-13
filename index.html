@@ -1,345 +1,781 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dad Activity Generator</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dad Activity Generator</title>
 
-    body {
-      min-height: 100vh;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Lobster&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
 
-    .card {
-      background: white;
-      border-radius: 2rem;
-      padding: 2.5rem 2rem;
-      max-width: 540px;
-      width: 100%;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-      text-align: center;
-    }
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    min-height: 100vh;
+    font-family: 'Nunito', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  button { font-family: inherit; cursor: pointer; }
+  #root { min-height: 100vh; }
+</style>
 
-    .hero-icon { font-size: 3.5rem; margin-bottom: 0.5rem; }
-
-    h1 {
-      font-size: 1.8rem;
-      color: #2d2d2d;
-      margin-bottom: 0.25rem;
-    }
-
-    .subtitle {
-      color: #888;
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-    }
-
-    /* Intensity selector */
-    .intensity-label {
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 0.75rem;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .intensity-buttons {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .intensity-btn {
-      flex: 1;
-      min-width: 120px;
-      padding: 0.75rem 0.5rem;
-      border: 2.5px solid #e0e0e0;
-      border-radius: 1rem;
-      background: white;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: #555;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .intensity-btn .icon { font-size: 1.6rem; }
-
-    .intensity-btn:hover {
-      border-color: #fcb69f;
-      background: #fff8f5;
-      transform: translateY(-2px);
-    }
-
-    .intensity-btn.active {
-      border-color: #ff7043;
-      background: #fff3ee;
-      color: #ff7043;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(255, 112, 67, 0.2);
-    }
-
-    /* Generate button */
-    .generate-btn {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 1.2rem;
-      background: linear-gradient(135deg, #ff7043, #fcb69f);
-      color: white;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 6px 20px rgba(255, 112, 67, 0.35);
-      margin-bottom: 2rem;
-    }
-
-    .generate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(255, 112, 67, 0.45);
-    }
-
-    .generate-btn:active { transform: translateY(0); }
-
-    .generate-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Activity result */
-    .activity-box {
-      background: #fafafa;
-      border-radius: 1.2rem;
-      padding: 1.5rem;
-      text-align: left;
-      border: 1.5px solid #f0f0f0;
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .activity-box.visible { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .activity-type {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 0.25rem 0.75rem;
-      border-radius: 2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .tag-walk   { background: #e8f5e9; color: #388e3c; }
-    .tag-play   { background: #e3f2fd; color: #1976d2; }
-    .tag-puzzle { background: #f3e5f5; color: #7b1fa2; }
-
-    .activity-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #2d2d2d;
-      margin-bottom: 0.5rem;
-    }
-
-    .activity-description {
-      font-size: 0.95rem;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
-    }
-
-    .activity-duration {
-      font-size: 0.85rem;
-      color: #999;
-      font-weight: 600;
-    }
-
-    .activity-duration span { color: #ff7043; }
-  </style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body>
-
-<div class="card">
-  <div class="hero-icon">👶</div>
-  <h1>Dad Activity Generator</h1>
-  <p class="subtitle">Congratulations on your paternal leave! What shall we do today?</p>
-
-  <p class="intensity-label">Choose intensity</p>
-  <div class="intensity-buttons">
-    <button class="intensity-btn active" data-type="walk" onclick="selectType(this)">
-      <span class="icon">🚶</span>Long Walk
-    </button>
-    <button class="intensity-btn" data-type="play" onclick="selectType(this)">
-      <span class="icon">🧸</span>Playing
-    </button>
-    <button class="intensity-btn" data-type="puzzle" onclick="selectType(this)">
-      <span class="icon">🧩</span>Puzzle
-    </button>
-  </div>
-
-  <button class="generate-btn" onclick="generateActivity()">
-    Generate Activity ✨
-  </button>
-
-  <div class="activity-box" id="activityBox">
-    <div class="activity-type" id="activityTag"></div>
-    <div class="activity-title" id="activityTitle"></div>
-    <div class="activity-description" id="activityDesc"></div>
-    <div class="activity-duration">Duration: <span id="activityDuration"></span></div>
-  </div>
-</div>
+<div id="root"></div>
 
 <script>
-  const activities = {
-    walk: [
-      {
-        title: "Nature Scavenger Hunt Walk",
-        description: "Head to the nearest park and look for 5 things: something red, something soft, a bird, a puddle, and a stick. Point everything out to the little one and narrate what you see — babies love the sound of your voice.",
-        duration: "45–60 min"
-      },
-      {
-        title: "Neighbourhood Discovery Stroll",
-        description: "Pick a direction you don't usually go and just walk. Stop whenever something catches attention — a dog behind a fence, a digger on a construction site, or pigeons on a roof. No destination needed.",
-        duration: "30–45 min"
-      },
-      {
-        title: "Morning Bakery Loop",
-        description: "Walk to the nearest bakery, grab yourself a coffee and a treat, and stroll back. Fresh air, a reward, and a happy baby in the pram — a dad-leave classic.",
-        duration: "30–40 min"
-      },
-      {
-        title: "Puddle Patrol",
-        description: "After rain (or just for fun), find a route with puddles, crunchy leaves, or interesting textures underfoot. Let the little one feel the different surfaces. Wellies optional but recommended.",
-        duration: "20–35 min"
-      },
-      {
-        title: "Forest Bathing Wander",
-        description: "Find a wooded trail and walk slowly — no goal, no pace target. Point out trees, listen for birds, breathe the air. Studies show it lowers stress for parent and child alike.",
-        duration: "60–90 min"
-      }
+// ── Activity data — dad humor, baby 6–12 months ──────────────────────────────
+window.DAD_ACTIVITIES = {
+  walk: {
+    label: 'Long Walk', emoji: '🚶',
+    activities: [
+      { title: "Nature Scavenger Hunt", description: "Head to the nearest park and hunt for five things: something red, something soft, a bird, a puddle, a stick. Narrate everything aloud — you're the David Attenborough of this pram now.", duration: "45–60 min" },
+      { title: "Neighbourhood Wrong-Turn", description: "Pick a direction you never take. Stop for every dog, digger, or pigeon. No destination. Getting lost is the point.", duration: "30–45 min" },
+      { title: "Bakery Loop", description: "Walk to the nearest bakery. You earn a coffee. Baby gets a pram nap. Everyone wins. The dad-leave classic.", duration: "30–40 min" },
+      { title: "Puddle Patrol", description: "After rain (or after the garden hose), find a route with puddles and crunchy leaves. Let them feel the textures. Wellies non-negotiable.", duration: "20–35 min" },
+      { title: "Forest Bath", description: "Wooded trail, no goal, no Strava. Point at trees, listen for birds. Apparently lowers stress in adults too — for legal reasons that's not a medical claim.", duration: "60–90 min" },
+      { title: "Stroller Espresso Tour", description: "Three cafés, one loop. Rate the flat whites out of ten. Baby is your silent, judgmental sidekick.", duration: "45–75 min" },
     ],
-    play: [
-      {
-        title: "Bubble Bonanza",
-        description: "Grab a bottle of bubble mix and go outside (or open a window). Blow bubbles and let the little one try to catch or pop them. The look of wonder on their face never gets old.",
-        duration: "15–25 min"
-      },
-      {
-        title: "Cushion Mountain",
-        description: "Stack every cushion and pillow in the living room into a soft climbing mountain. Encourage crawling up and tumbling down. Great for motor development and guarantees big laughs.",
-        duration: "20–30 min"
-      },
-      {
-        title: "Pot and Spoon Orchestra",
-        description: "Pull out a few pots, lids, and wooden spoons. Let the baby bang away — it's an early music lesson. Join in on your own 'instrument' and make it a duet.",
-        duration: "15–20 min"
-      },
-      {
-        title: "Sensory Bag Play",
-        description: "Fill a zip-lock bag with hair gel and a few small colourful objects, seal it well. Let the little one squish and poke — all the sensory fun with zero mess.",
-        duration: "10–20 min"
-      },
-      {
-        title: "Dance Party",
-        description: "Put on your favourite playlist — upbeat, slow, anything goes — and dance with the baby in your arms. Spin, bounce, sway. They'll love the movement and you'll feel great.",
-        duration: "20–30 min"
-      },
-      {
-        title: "Peek-a-Boo Marathon",
-        description: "Classic for a reason. Use your hands, a tea towel, a pillow, the sofa — anywhere can be a hiding spot. Mix it up and watch the giggles roll in.",
-        duration: "10–15 min"
-      }
+  },
+  play: {
+    label: 'Playing', emoji: '🧸',
+    activities: [
+      { title: "Bubble Bonanza", description: "Bubble mix, open window, go. The look on their face is the entire reward. You will inhale at least one bubble — that's normal.", duration: "15–25 min" },
+      { title: "Cushion Mountain", description: "Stack every pillow in the house into a wobbly soft summit. Encourage crawling, tumbling, repeating. Cheap, brilliant, cardio for both of you.", duration: "20–30 min" },
+      { title: "Pot & Spoon Orchestra", description: "Pots, lids, wooden spoons. They bang, you bang, the neighbours regret moving in. This is music education.", duration: "15–20 min" },
+      { title: "Sensory Squish Bag", description: "Zip-lock bag, hair gel, a few small colourful bits. Seal it thoroughly (do not skip this step) and let them poke. Mess-free wizardry.", duration: "10–20 min" },
+      { title: "Dad-Dancing 101", description: "Pick a playlist with no shame. Hold baby, sway, spin slowly, dip dramatically. They cackle, you get steps in.", duration: "20–30 min" },
+      { title: "Peek-a-Boo Marathon", description: "Tea towel, hands, sofa back — any surface is a hiding place. The joke never gets old. Scientifically.", duration: "10–15 min" },
     ],
-    puzzle: [
-      {
-        title: "Shape Sorter Challenge",
-        description: "Sit together with a shape sorter or any simple sorting toy. Guide little hands to find the matching hole. Patience is the game — celebrate every success loudly.",
-        duration: "15–25 min"
-      },
-      {
-        title: "Stacking Tower Race",
-        description: "Build a tower of blocks together, then knock it down — pure joy. Gradually make it taller each round. See who laughs more when it topples.",
-        duration: "10–20 min"
-      },
-      {
-        title: "Object Permanence Box",
-        description: "Drop a small toy into a cup or box so it disappears, then tip it out. Repeat slowly. This simple trick teaches the brain that things exist even when hidden — a genuine developmental milestone.",
-        duration: "10–15 min"
-      },
-      {
-        title: "Simple Jigsaw Expedition",
-        description: "Pick a 2–6 piece chunky jigsaw and work through it together, naming each picture as pieces go in. Repetition is the point — toddler brains love doing it again and again.",
-        duration: "15–20 min"
-      },
-      {
-        title: "Matching Pairs Memory Game",
-        description: "Lay out pairs of matching objects (socks, blocks of the same colour, cups) face down and take turns flipping. Even if they can't follow the rules yet, the colour matching and tactile exploration are great.",
-        duration: "15–25 min"
-      },
-      {
-        title: "Water Pouring Station",
-        description: "Set up a small tub with cups and containers of different sizes. Let them pour, fill, and empty to their heart's content. Towel nearby recommended. Focus, concentration, and cause-and-effect all in one.",
-        duration: "20–30 min"
-      }
-    ]
-  };
-
-  let selectedType = 'walk';
-
-  function selectType(btn) {
-    document.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedType = btn.dataset.type;
-    document.getElementById('activityBox').classList.remove('visible');
-  }
-
-  function generateActivity() {
-    const pool = activities[selectedType];
-    const item = pool[Math.floor(Math.random() * pool.length)];
-
-    const tagEl = document.getElementById('activityTag');
-    tagEl.textContent = selectedType === 'walk' ? '🚶 Long Walk'
-                      : selectedType === 'play' ? '🧸 Playing'
-                      : '🧩 Puzzle';
-    tagEl.className = 'activity-type ' + (
-      selectedType === 'walk' ? 'tag-walk'
-    : selectedType === 'play' ? 'tag-play'
-    : 'tag-puzzle'
-    );
-
-    document.getElementById('activityTitle').textContent = item.title;
-    document.getElementById('activityDesc').textContent = item.description;
-    document.getElementById('activityDuration').textContent = item.duration;
-
-    const box = document.getElementById('activityBox');
-    box.classList.remove('visible');
-    void box.offsetWidth; // reflow to restart animation
-    box.classList.add('visible');
-  }
+  },
+  puzzle: {
+    label: 'Puzzle', emoji: '🧩',
+    activities: [
+      { title: "Shape Sorter Showdown", description: "Guide chubby hands toward the right hole. Celebrate every success like it's a World Cup goal. Patience is the whole sport.", duration: "15–25 min" },
+      { title: "Stack & Topple", description: "Build a tower of blocks. Baby demolishes it. You rebuild. Repeat until someone is laughing too hard to continue.", duration: "10–20 min" },
+      { title: "Object Permanence Trick", description: "Drop a toy into a cup, tip it back out. Repeat. Watching their brain figure out 'things still exist when hidden' never stops being magic.", duration: "10–15 min" },
+      { title: "Chunky Jigsaw Run", description: "A 2–6 piece chunky puzzle, named out loud as it goes in. \"That's a cow. The cow says moo. We are doing the cow now.\"", duration: "15–20 min" },
+      { title: "Sock Match-Up", description: "Pair up clean socks together. They mostly chew them. You technically did laundry. Multitasking.", duration: "10–15 min" },
+      { title: "Pour Station", description: "Small tub, a few cups, water. They pour, refill, dump. Towel ready. Cause-and-effect plus a wet floor — worth it.", duration: "20–30 min" },
+    ],
+  },
+  read: {
+    label: 'Read', emoji: '📖',
+    activities: [
+      { title: "Lift-the-Flap Theatre", description: "Find any flap book. Do the voices. Commit to the voices. You will see the same flap fifty times today — say hello to it every single time.", duration: "10–20 min" },
+      { title: "Touch-and-Feel Tour", description: "A sensory board book. Guide tiny fingers to the fuzzy bit, the rough bit, the shiny bit. Narrate textures like a wine critic.", duration: "10–15 min" },
+      { title: "Same Book, Again", description: "They will demand the same book. Read it. Read it again. Read it slower. Then faster. Repetition wires their brain — it's a feature.", duration: "15–25 min" },
+      { title: "Reading Fort", description: "Pillows, blanket draped over the sofa, torchlight. A whole new world for ten paperback pages. Snacks optional but recommended.", duration: "20–30 min" },
+      { title: "Rhyme Time", description: "Any nursery rhyme book. Sing more than read. Pat their feet to the beat. They'll be giggling before page three.", duration: "10–15 min" },
+      { title: "Photo Album Story", description: "Open a photo album or phone camera roll. Tell them who's who. \"That's Granny. That's Granny again. That's Granny holding you.\" Bonding fuel.", duration: "15–25 min" },
+    ],
+  },
+};
 </script>
 
+<script type="text/babel" data-presets="react">
+
+// ── Tweaks panel ─────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    background:rgba(250,249,247,.88);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:pointer;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:pointer;padding:4px 6px;line-height:1.2;overflow-wrap:anywhere}
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (open) clampToViewport();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => setOpen(false);
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel"
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close" onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return <><div className="twk-sect">{label}</div>{children}</>;
+}
+
+function TweakRow({ label, children }) {
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      {children}
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = opts.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const n = opts.length;
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[n] ?? 0);
+
+  if (!fitsAsSegments) {
+    return (
+      <TweakRow label={label}>
+        <select className="twk-field" value={value} onChange={(e) => {
+          const m = opts.find((o) => String(o.value) === e.target.value);
+          onChange(m ? m.value : e.target.value);
+        }}>
+          {opts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </select>
+      </TweakRow>
+    );
+  }
+
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <style>{`.twk-seg-thumb{transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}.twk-seg.dragging .twk-seg-thumb{transition:none}`}</style>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+
+// ── Storybook Crayon — Direction A ───────────────────────────────────────────
+
+const PALETTES = {
+  cream:  { paper: '#FAF3E0', ink: '#3A2F23', muted: '#8A7256', accent: '#C9A86B' },
+  blush:  { paper: '#FBEFE6', ink: '#4A2A1C', muted: '#A07060', accent: '#D88A6C' },
+  mint:   { paper: '#EDF4E8', ink: '#27392A', muted: '#6F8870', accent: '#7DA88A' },
+  sky:    { paper: '#E8EFF5', ink: '#1F2E3D', muted: '#5E7488', accent: '#7B9FBD' },
+  butter: { paper: '#FBF3D4', ink: '#3D2F0A', muted: '#8A7430', accent: '#D9B656' },
+};
+
+const CAT_COLORS = {
+  walk:   { bg: '#E8F0DC', ink: '#4A6B3A', tape: '#A8C49A' },
+  play:   { bg: '#FBE2DA', ink: '#8A4030', tape: '#F4B5A8' },
+  puzzle: { bg: '#FAEBC5', ink: '#7A5A1A', tape: '#E8C36A' },
+  read:   { bg: '#DDE7F0', ink: '#365070', tape: '#A8C3D8' },
+};
+
+const DRAMA = {
+  subtle:  { chip: 1.5, card: -0.4, bounce: 1.10, shadow: 2 },
+  playful: { chip: 3,   card: -1,   bounce: 1.25, shadow: 3 },
+  wild:    { chip: 6,   card: -2.5, bounce: 1.45, shadow: 4 },
+};
+
+const TITLE_FONTS = {
+  bagel:   { family: '"Bagel Fat One", serif',   weight: 400, sizeHero: 46, sizeCard: 26 },
+  lobster: { family: '"Lobster", cursive',        weight: 400, sizeHero: 50, sizeCard: 28 },
+  fredoka: { family: '"Fredoka", system-ui',      weight: 700, sizeHero: 48, sizeCard: 27 },
+};
+
+function getDayOnLeave() {
+  const KEY = 'dad-leave-start';
+  let stored = null;
+  try { stored = localStorage.getItem(KEY); } catch {}
+  if (!stored) {
+    const today = new Date().toISOString().slice(0, 10);
+    try { localStorage.setItem(KEY, today); } catch {}
+    return 1;
+  }
+  const start = new Date(stored);
+  const now = new Date();
+  start.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
+  return Math.max(1, Math.floor((now - start) / 86400000) + 1);
+}
+
+function Icon({ cat, style, size = 32 }) {
+  if (style === 'emoji') {
+    return <span style={{ fontSize: size, lineHeight: 1, display: 'inline-flex' }}>{DAD_ACTIVITIES[cat].emoji}</span>;
+  }
+  const letter = { walk: 'W', play: 'P', puzzle: 'Z', read: 'R' }[cat];
+  const color = { walk: '#A8C49A', play: '#F4B5A8', puzzle: '#E8C36A', read: '#A8C3D8' }[cat];
+  if (style === 'letter') {
+    return (
+      <div style={{
+        width: size, height: size, borderRadius: '50%', background: color,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontFamily: '"Bagel Fat One", serif',
+        fontSize: size * 0.55, color: '#fff',
+        boxShadow: '0 2px 0 rgba(0,0,0,0.12)',
+      }}>{letter}</div>
+    );
+  }
+  const shape = {
+    walk:   <circle cx="16" cy="16" r="13" fill={color}/>,
+    play:   <polygon points="16,3 29,28 3,28" fill={color}/>,
+    puzzle: <rect x="3" y="3" width="26" height="26" rx="3" fill={color}/>,
+    read:   <polygon points="16,2 30,16 16,30 2,16" fill={color}/>,
+  }[cat];
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" style={{ filter: 'drop-shadow(0 2px 0 rgba(0,0,0,0.12))' }}>
+      {shape}
+    </svg>
+  );
+}
+
+function Squiggle({ color = '#C9A86B', style = {} }) {
+  return (
+    <svg width="60" height="20" viewBox="0 0 60 20" style={style}>
+      <path d="M2 10 Q 10 2, 18 10 T 34 10 T 50 10 T 58 10"
+        stroke={color} strokeWidth="2" fill="none" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+function ActivityCard({ cat, item, palette, C, rotation, drama, titleFont, iconStyle, seedKey }) {
+  return (
+    <div key={seedKey} style={{
+      position: 'relative',
+      background: '#FFFCF4',
+      borderRadius: 14,
+      padding: '30px 22px 24px',
+      transform: `rotate(${rotation}deg)`,
+      boxShadow: `0 6px 0 rgba(58,47,35,0.08), 0 22px 36px -10px rgba(58,47,35,0.22)`,
+      border: '1px solid rgba(58,47,35,0.1)',
+      animation: 'sbFlop 0.5s cubic-bezier(.3,1.4,.5,1)',
+    }}>
+      {/* washi tape */}
+      <div style={{
+        position: 'absolute', top: -12, left: '50%',
+        transform: 'translateX(-50%) rotate(-4deg)',
+        width: 90, height: 26, background: C.tape, opacity: 0.88,
+        backgroundImage: 'repeating-linear-gradient(45deg, transparent 0 4px, rgba(255,255,255,0.28) 4px 8px)',
+        borderRadius: 2,
+        boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+      }}/>
+      {/* corner doodle */}
+      <svg width="28" height="28" viewBox="0 0 28 28" style={{
+        position: 'absolute', top: 10, right: 10, opacity: 0.55,
+      }}>
+        <path d="M4 14 Q 4 4, 14 4 T 24 14" stroke={C.ink} strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+        <circle cx="14" cy="14" r="2.5" fill={C.ink}/>
+      </svg>
+
+      <div style={{
+        display: 'inline-flex', alignItems: 'center', gap: 6,
+        padding: '4px 10px', background: C.bg,
+        borderRadius: 999, marginBottom: 14,
+        fontFamily: '"Nunito"', fontWeight: 800, fontSize: 11,
+        textTransform: 'uppercase', letterSpacing: 0.8,
+        color: C.ink,
+      }}>
+        <Icon cat={cat} style={iconStyle} size={14}/>
+        {DAD_ACTIVITIES[cat].label}
+      </div>
+
+      <div style={{
+        fontFamily: titleFont.family, fontWeight: titleFont.weight,
+        fontSize: titleFont.sizeCard, lineHeight: 1.05,
+        color: palette.ink, marginBottom: 10, letterSpacing: -0.2,
+      }}>{item.title}</div>
+
+      <div style={{
+        fontFamily: '"Nunito"', fontSize: 15, lineHeight: 1.55,
+        color: palette.muted, marginBottom: 16,
+      }}>{item.description}</div>
+
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 6,
+        fontFamily: '"Caveat", cursive', fontSize: 19,
+        color: C.ink, transform: 'rotate(-1deg)', transformOrigin: 'left',
+      }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke={C.ink} strokeWidth="2"/>
+          <path d="M12 7v5l3 2" stroke={C.ink} strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+        about {item.duration}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState({ palette, C, cat, iconStyle }) {
+  return (
+    <div style={{
+      position: 'relative',
+      background: 'rgba(255,252,244,0.55)',
+      border: `2px dashed ${palette.ink}55`,
+      borderRadius: 14,
+      padding: '28px 22px 26px',
+      textAlign: 'center',
+    }}>
+      <div style={{
+        fontSize: 42, lineHeight: 1, marginBottom: 12,
+        transform: 'rotate(-4deg)', display: 'inline-block',
+        filter: 'drop-shadow(0 3px 0 rgba(58,47,35,0.08))',
+      }}>
+        <Icon cat={cat} style={iconStyle} size={48}/>
+      </div>
+      <div style={{
+        fontFamily: '"Caveat", cursive', fontSize: 22,
+        color: palette.muted, lineHeight: 1.2,
+        transform: 'rotate(-1deg)',
+      }}>pick a sticker above,<br/>then hit the big button</div>
+      {/* arrow pointing up */}
+      <svg width="36" height="46" viewBox="0 0 36 46" style={{
+        position: 'absolute', top: -34, right: 30, opacity: 0.7,
+        transform: 'rotate(8deg)',
+      }}>
+        <path d="M18 44 C 18 30, 6 22, 6 8" stroke={palette.muted} strokeWidth="2" fill="none" strokeLinecap="round" strokeDasharray="3 4"/>
+        <path d="M2 12 L 6 4 L 12 10" stroke={palette.muted} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+}
+
+function Storybook({ tweaks }) {
+  const palette = PALETTES[tweaks.tint] || PALETTES.cream;
+  const drama = DRAMA[tweaks.drama] || DRAMA.playful;
+  const titleFont = TITLE_FONTS[tweaks.titleFont] || TITLE_FONTS.bagel;
+  const iconStyle = tweaks.iconStyle;
+
+  const [cat, setCat] = React.useState('walk');
+  const [activity, setActivity] = React.useState(null);
+  const [spinning, setSpinning] = React.useState(false);
+  const [history, setHistory] = React.useState([]);
+  const [seedKey, setSeedKey] = React.useState(0);
+  const dayNum = React.useMemo(() => getDayOnLeave(), []);
+
+  const cats = ['walk', 'play', 'puzzle', 'read'];
+  const rotations = React.useMemo(() => ({
+    walk: -drama.chip, play: drama.chip * 0.65, puzzle: -drama.chip * 0.7, read: drama.chip,
+  }), [drama.chip]);
+
+  const C = CAT_COLORS[cat];
+  const cardRotation = drama.card;
+
+  const pick = () => {
+    setSpinning(true);
+    setTimeout(() => {
+      const pool = DAD_ACTIVITIES[cat].activities;
+      let next, attempts = 0;
+      do {
+        next = pool[Math.floor(Math.random() * pool.length)];
+        attempts++;
+      } while (activity && next.title === activity.title && pool.length > 1 && attempts < 5);
+      setActivity(next);
+      setSeedKey((k) => k + 1);
+      setHistory((h) => {
+        const trimmed = h.filter((x) => x.title !== next.title);
+        return [{ cat, ...next }, ...trimmed].slice(0, 4);
+      });
+      setSpinning(false);
+    }, 320);
+  };
+
+  const recall = (item) => {
+    setCat(item.cat);
+    setActivity({ title: item.title, description: item.description, duration: item.duration });
+    setSeedKey((k) => k + 1);
+  };
+
+  const openTweaks = () => {
+    window.dispatchEvent(new MessageEvent('message', { data: { type: '__activate_edit_mode' } }));
+  };
+
+  return (
+    <div style={{
+      width: '100%', minHeight: '100vh',
+      background: palette.paper,
+      backgroundImage: `radial-gradient(circle at 10% 6%, ${palette.accent}26, transparent 38%), radial-gradient(circle at 92% 96%, ${C.tape}38, transparent 42%)`,
+      fontFamily: '"Nunito", system-ui, sans-serif',
+      color: palette.ink,
+      padding: 'max(env(safe-area-inset-top, 0px) + 24px, 36px) 22px max(env(safe-area-inset-bottom, 0px) + 32px, 40px)',
+      boxSizing: 'border-box',
+      position: 'relative',
+      overflow: 'hidden',
+      transition: 'background 0.45s ease',
+    }}>
+      {/* paper grain */}
+      <div style={{
+        position: 'absolute', inset: 0, opacity: 0.35, pointerEvents: 'none',
+        backgroundImage: 'radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px)',
+        backgroundSize: '4px 4px',
+      }}/>
+
+      {/* top row: day counter + live badge + settings */}
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: 14, position: 'relative', zIndex: 1, gap: 8,
+      }}>
+        <span style={{
+          fontFamily: '"Caveat", cursive', fontSize: 19, color: palette.muted,
+          transform: 'rotate(-1deg)', transformOrigin: 'left',
+          whiteSpace: 'nowrap', flex: 1,
+        }}>day {dayNum} · dad-leave</span>
+
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '2px 10px',
+          background: '#FFFCF4', border: `1.5px solid ${palette.ink}`,
+          borderRadius: 999, fontSize: 13,
+          fontFamily: '"Nunito"', fontWeight: 800,
+          color: palette.ink, transform: 'rotate(2deg)',
+          boxShadow: `1.5px 1.5px 0 ${palette.ink}`,
+          whiteSpace: 'nowrap',
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#D94B3C', flexShrink: 0 }}/>
+          live
+        </span>
+
+        <button onClick={openTweaks} title="Customise" style={{
+          background: 'none', border: 'none', padding: 4,
+          opacity: 0.45, fontSize: 18, lineHeight: 1,
+          transform: 'rotate(2deg)',
+          transition: 'opacity .15s',
+        }} onMouseEnter={(e) => e.currentTarget.style.opacity = 0.8}
+           onMouseLeave={(e) => e.currentTarget.style.opacity = 0.45}>
+          ⚙
+        </button>
+      </div>
+
+      {/* headline */}
+      <div style={{ position: 'relative', marginBottom: 6 }}>
+        <div style={{
+          fontFamily: '"Caveat", cursive',
+          fontSize: 22, color: palette.muted, lineHeight: 1.1,
+          marginBottom: 6,
+          transform: 'rotate(-1.5deg)', transformOrigin: 'left',
+          display: 'inline-block', whiteSpace: 'nowrap',
+        }}>today, dad &amp; baby...</div>
+        <h1 style={{
+          fontFamily: titleFont.family, fontWeight: titleFont.weight,
+          fontSize: titleFont.sizeHero, lineHeight: 0.95,
+          color: palette.ink, letterSpacing: -0.5,
+          margin: 0, marginBottom: 6,
+        }}>What shall<br/>we do?</h1>
+        <div style={{ position: 'absolute', top: 16, right: -4 }}>
+          <Squiggle color={palette.accent}/>
+        </div>
+      </div>
+
+      {/* category sticker chips */}
+      <div style={{
+        display: 'flex', flexWrap: 'wrap', gap: 10,
+        marginTop: 22, marginBottom: 22, position: 'relative', zIndex: 1,
+      }}>
+        {cats.map((c) => {
+          const active = c === cat;
+          const cc = CAT_COLORS[c];
+          return (
+            <button key={c}
+              onClick={() => { setCat(c); setActivity(null); }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '9px 14px 9px 11px',
+                background: active ? cc.bg : '#FFFCF4',
+                border: `2.5px solid ${active ? cc.ink : palette.ink}`,
+                borderRadius: 999,
+                fontFamily: '"Nunito"', fontWeight: 800, fontSize: 14,
+                color: active ? cc.ink : palette.ink,
+                transform: `rotate(${rotations[c]}deg) ${active ? 'scale(1.05)' : 'scale(1)'}`,
+                boxShadow: active
+                  ? `${drama.shadow}px ${drama.shadow}px 0 ${cc.ink}`
+                  : `2px 2px 0 ${palette.ink}`,
+                transition: 'transform .18s, box-shadow .18s, background .18s, border-color .18s',
+              }}>
+              <Icon cat={c} style={iconStyle} size={22}/>
+              {DAD_ACTIVITIES[c].label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* generate button */}
+      <button onClick={pick} disabled={spinning} style={{
+        width: '100%', padding: '17px 16px',
+        background: palette.ink, color: palette.paper,
+        border: 'none', borderRadius: 18,
+        fontFamily: titleFont.family, fontWeight: titleFont.weight,
+        fontSize: 22, letterSpacing: 0.3,
+        cursor: spinning ? 'wait' : 'pointer',
+        boxShadow: `${drama.shadow + 1}px ${drama.shadow + 1}px 0 ${palette.accent}`,
+        transition: 'transform .12s, box-shadow .12s',
+        transform: spinning ? `translate(${drama.shadow / 2}px,${drama.shadow / 2}px)` : 'none',
+        marginBottom: 22,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+        position: 'relative', zIndex: 1,
+      }}>
+        <span>{spinning ? '...thinking...' : (activity ? 'Roll again' : 'Pick an Adventure')}</span>
+        <span style={{
+          display: 'inline-block',
+          transition: 'transform .35s',
+          transform: spinning ? 'rotate(720deg)' : 'rotate(0)',
+          fontSize: 18,
+        }}>✦</span>
+      </button>
+
+      {/* activity card or empty state */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {activity ? (
+          <ActivityCard
+            cat={cat} item={activity} seedKey={seedKey}
+            palette={palette} C={C}
+            rotation={cardRotation} drama={drama}
+            titleFont={titleFont} iconStyle={iconStyle}
+          />
+        ) : (
+          <EmptyState palette={palette} C={C} cat={cat} iconStyle={iconStyle}/>
+        )}
+      </div>
+
+      {/* history strip */}
+      {history.length > 0 && (
+        <div style={{ marginTop: 28, position: 'relative', zIndex: 1 }}>
+          <div style={{
+            fontFamily: '"Caveat", cursive', fontSize: 18,
+            color: palette.muted, marginBottom: 8,
+            transform: 'rotate(-1deg)', transformOrigin: 'left', display: 'inline-block',
+          }}>recently rolled</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {history.map((h, i) => {
+              const hc = CAT_COLORS[h.cat];
+              return (
+                <button key={h.title + i} onClick={() => recall(h)} title={h.title}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6,
+                    padding: '5px 10px 5px 8px',
+                    background: '#FFFCF4',
+                    border: `1.5px solid ${palette.ink}`,
+                    borderRadius: 999,
+                    fontFamily: '"Nunito"', fontWeight: 700, fontSize: 12,
+                    color: palette.ink,
+                    boxShadow: `1.5px 1.5px 0 ${hc.tape}`,
+                    maxWidth: 200, overflow: 'hidden',
+                    whiteSpace: 'nowrap', textOverflow: 'ellipsis',
+                  }}>
+                  <Icon cat={h.cat} style={iconStyle} size={14}/>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.title}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes sbFlop {
+          0%   { transform: rotate(${cardRotation + 3}deg) translateY(24px) scale(0.94); }
+          55%  { transform: rotate(${cardRotation - 1.5}deg) translateY(-3px) scale(${1 + (drama.bounce - 1) * 0.05}); }
+          100% { transform: rotate(${cardRotation}deg) translateY(0) scale(1); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+
+// ── App ───────────────────────────────────────────────────────────────────────
+
+const TWEAK_DEFAULTS = {
+  iconStyle: 'emoji',
+  tint: 'cream',
+  drama: 'playful',
+  titleFont: 'bagel',
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  return (
+    <React.Fragment>
+      <Storybook tweaks={t}/>
+      <TweaksPanel title="Customise">
+        <TweakSection label="Look">
+          <TweakRadio label="Paper tint" value={t.tint}
+            options={[
+              { value: 'cream',  label: 'Cream'  },
+              { value: 'blush',  label: 'Blush'  },
+              { value: 'mint',   label: 'Mint'   },
+              { value: 'sky',    label: 'Sky'    },
+              { value: 'butter', label: 'Butter' },
+            ]}
+            onChange={(v) => setTweak('tint', v)}
+          />
+          <TweakRadio label="Title font" value={t.titleFont}
+            options={[
+              { value: 'bagel',   label: 'Bagel'   },
+              { value: 'lobster', label: 'Lobster' },
+              { value: 'fredoka', label: 'Fredoka' },
+            ]}
+            onChange={(v) => setTweak('titleFont', v)}
+          />
+        </TweakSection>
+        <TweakSection label="Feel">
+          <TweakRadio label="Drama" value={t.drama}
+            options={[
+              { value: 'subtle',  label: 'Subtle'  },
+              { value: 'playful', label: 'Playful' },
+              { value: 'wild',    label: 'Wild'    },
+            ]}
+            onChange={(v) => setTweak('drama', v)}
+          />
+          <TweakRadio label="Icons" value={t.iconStyle}
+            options={[
+              { value: 'emoji',  label: 'Emoji'  },
+              { value: 'letter', label: 'Letter' },
+              { value: 'shape',  label: 'Shape'  },
+            ]}
+            onChange={(v) => setTweak('iconStyle', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>
